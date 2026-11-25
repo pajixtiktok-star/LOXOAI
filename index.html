@@ -1,0 +1,269 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOXOAI - Your AI Assistant</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090711;color:#fff;
+ font-family:Arial,sans-serif;
+}
+.app{display:flex;min-height:100vh}
+.sidebar{
+ width:250px;background:#100d1b;
+ border-right:1px solid #292039;
+ padding:22px;display:flex;flex-direction:column;
+}
+.logo{font-size:27px;font-weight:900;margin-bottom:35px}
+.logo span{color:#a78bfa}
+.tag{font-size:10px;color:#8f83a8;letter-spacing:3px}
+.new{
+ background:#7548e8;color:white;border:0;
+ padding:13px;border-radius:10px;cursor:pointer;
+ margin-bottom:28px;font-size:14px
+}
+.label{font-size:10px;color:#82768f;margin-bottom:12px}
+.mode{
+ background:transparent;color:#c8c0d5;
+ border:1px solid transparent;padding:13px;
+ text-align:left;border-radius:9px;cursor:pointer;
+ margin-bottom:5px
+}
+.mode:hover,.mode.active{
+ background:#211832;border-color:#7046a7;color:white
+}
+.bottom{margin-top:auto;color:#8d83a0;font-size:12px}
+.main{flex:1;display:flex;flex-direction:column;min-width:0}
+header{
+ height:65px;border-bottom:1px solid #292039;
+ display:flex;align-items:center;padding:0 25px;
+ color:#b8abc9;font-size:13px
+}
+.online{margin-left:auto;color:#8bdfa9}
+.content{
+ width:min(850px,100%);margin:auto;
+ padding:30px 22px;display:flex;
+ flex-direction:column;min-height:calc(100vh - 65px)
+}
+.welcome{text-align:center;margin:auto auto 35px}
+.icon{
+ width:70px;height:70px;border-radius:23px;
+ background:linear-gradient(135deg,#b18aff,#6935d7);
+ display:grid;place-items:center;font-size:35px;
+ margin:0 auto 22px;box-shadow:0 0 40px #8b5cf655
+}
+h1{font-size:clamp(32px,5vw,49px);margin:10px 0}
+.gradient{
+ background:linear-gradient(90deg,#c4b5fd,#8b5cf6,#e9baff);
+ color:transparent;background-clip:text
+}
+.subtitle{color:#9990a9;font-size:14px;line-height:1.6}
+.cards{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:12px;margin-top:30px;text-align:left
+}
+.card{
+ position:relative;background:#151120;
+ border:1px solid #302442;border-radius:13px;
+ padding:18px;color:white;cursor:pointer;
+ text-align:left
+}
+.card:hover{border-color:#9a72f0;background:#20182f}
+.card b{display:block;margin:10px 0 5px}
+.card small{color:#9990a9}
+.card .symbol{font-size:23px;color:#b99cff}
+.chat{width:100%;display:flex;flex-direction:column;gap:20px}
+.message{display:flex;gap:12px;align-items:flex-start}
+.avatar{
+ min-width:34px;height:34px;border-radius:11px;
+ display:grid;place-items:center;background:#281d3e;
+ color:#c4a9ff
+}
+.bubble{
+ background:#151120;border:1px solid #302442;
+ padding:13px 15px;border-radius:12px;
+ line-height:1.6;font-size:14px;
+ white-space:pre-wrap;overflow-wrap:anywhere;
+ max-width:calc(100% - 45px)
+}
+.user .bubble{background:#241a37}
+.composer{
+ margin-top:auto;background:#151120;
+ border:1px solid #493363;border-radius:15px;
+ padding:13px
+}
+textarea{
+ width:100%;background:transparent;border:0;
+ outline:none;color:white;font-size:14px;
+ resize:vertical;min-height:48px;font-family:Arial
+}
+textarea::placeholder{color:#82768f}
+.sendrow{display:flex;align-items:center;justify-content:space-between}
+.send{
+ background:linear-gradient(135deg,#a78bfa,#7548e8);
+ border:0;color:white;border-radius:10px;
+ width:38px;height:38px;font-size:22px;cursor:pointer
+}
+.send:disabled{opacity:.5}
+.hint{font-size:10px;color:#82768f}
+.footer{text-align:center;color:#71677f;font-size:10px;margin-top:12px}
+.hidden{display:none!important}
+.copy{
+ margin-top:10px;background:#2b2040;color:#d9c9ff;
+ border:1px solid #574078;border-radius:7px;
+ padding:7px 12px;cursor:pointer
+}
+@media(max-width:650px){
+ .sidebar{width:190px;padding:13px}
+ .logo{font-size:21px}
+ .content{padding:25px 13px}
+ header{padding:0 13px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+ <div class="logo">✦ LOXO<span>AI</span>
+ <div class="tag">YOUR CREATIVE AI</div></div>
+
+ <button class="new" onclick="newChat()">＋ New Chat</button>
+ <div class="label">AI TOOLS</div>
+
+ <button class="mode active" data-mode="general">✧ General AI</button>
+ <button class="mode" data-mode="code">⌘ Code Generator</button>
+ <button class="mode" data-mode="roblox">▣ Roblox AI</button>
+ <button class="mode" data-mode="web">◇ Website Creator</button>
+ <button class="mode" data-mode="python">⌁ Python AI</button>
+
+ <div class="bottom">● LOXOAI SYSTEM<br><br>Version 1.0</div>
+</aside>
+
+<main class="main">
+<header>
+ <span id="modeName">General AI</span>
+ <span class="online">● ONLINE</span>
+</header>
+
+<section class="content">
+<div class="welcome" id="welcome">
+ <div class="icon">✦</div>
+ <div class="tag">WELCOME TO THE FUTURE</div>
+ <h1>Welcome to <span class="gradient">LOXOAI</span></h1>
+ <p class="subtitle">
+ Your creative AI assistant.<br>
+ Create code, games, websites and much more.
+ </p>
+
+ <div class="cards">
+  <button class="card" onclick="quick('Vytvoř mi Roblox obchod v Lua.')">
+   <span class="symbol">▣</span>
+   <b>Roblox Scripts</b>
+   <small>Create Roblox systems</small>
+  </button>
+  <button class="card" onclick="quick('Vytvoř mi moderní HTML web.')">
+   <span class="symbol">◇</span>
+   <b>Website Creator</b>
+   <small>Create websites</small>
+  </button>
+  <button class="card" onclick="quick('Napiš mi Python program.')">
+   <span class="symbol">⌁</span>
+   <b>Python AI</b>
+   <small>Generate Python code</small>
+  </button>
+  <button class="card" onclick="quick('Vymysli mi novou počítačovou hru.')">
+   <span class="symbol">✧</span>
+   <b>Game Creator</b>
+   <small>Build new game ideas</small>
+  </button>
+ </div>
+</div>
+
+<div class="chat" id="chat"></div>
+
+<div class="composer">
+ <textarea id="prompt" placeholder="Ask LOXOAI anything..." rows="2"></textarea>
+ <div class="sendrow">
+  <span class="hint">ENTER TO SEND · SHIFT + ENTER</span>
+  <button class="send" id="send">↑</button>
+ </div>
+</div>
+<div class="footer">LOXOAI can make mistakes. Always test generated code.</div>
+</section>
+</main>
+</div>
+
+<script>
+let mode="general";
+const names={
+ general:"General AI",
+ code:"Code Generator",
+ roblox:"Roblox AI",
+ web:"Website Creator",
+ python:"Python AI"
+};
+
+document.querySelectorAll(".mode").forEach(button=>{
+ button.onclick=()=>{
+  document.querySelectorAll(".mode").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  mode=button.dataset.mode;
+  document.getElementById("modeName").textContent=names[mode];
+ };
+});
+
+function addMessage(type,text){
+ const row=document.createElement("div");
+ row.className="message "+type;
+ const avatar=document.createElement("div");
+ avatar.className="avatar";
+ avatar.textContent=type==="user"?"YOU":"✦";
+ const bubble=document.createElement("div");
+ bubble.className="bubble";
+ bubble.textContent=text;
+ row.append(avatar,bubble);
+ document.getElementById("chat").append(row);
+ return bubble;
+}
+
+function quick(text){
+ document.getElementById("prompt").value=text;
+ sendMessage();
+}
+
+function newChat(){
+ document.getElementById("chat").innerHTML="";
+ document.getElementById("welcome").classList.remove("hidden");
+}
+
+async function sendMessage(){
+ const input=document.getElementById("prompt");
+ const text=input.value.trim();
+ if(!text)return;
+ input.value="";
+ document.getElementById("welcome").classList.add("hidden");
+ addMessage("user",text);
+ const answer=addMessage("assistant","LOXOAI DEMO MODE\n\nToto je zatím ukázková verze. Pro skutečné generování odpovědí připojíme bezpečné AI API.");
+ const copy=document.createElement("button");
+ copy.className="copy";
+ copy.textContent="Copy prompt";
+ copy.onclick=()=>{
+  navigator.clipboard.writeText(text);
+  copy.textContent="Copied!";
+ };
+ answer.append(document.createElement("br"),copy);
+}
+
+document.getElementById("send").onclick=sendMessage;
+document.getElementById("prompt").addEventListener("keydown",e=>{
+ if(e.key==="Enter"&&!e.shiftKey){
+  e.preventDefault();
+  sendMessage();
+ }
+});
+</script>
+</body>
+</html>
